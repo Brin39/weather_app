@@ -1,0 +1,339 @@
+:root {
+     --primary-color: #4285f4;
+     --secondary-color: #f8f9fa;
+     --text-color: #333;
+     --border-radius: 8px;
+     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+     margin: 0;
+     font-family: 'Roboto', sans-serif;
+     background-color: #f0f2f5;
+     color: var(--text-color);
+     font-size: 16px;
+}
+
+.container {
+     width: 100%;
+     max-width: 1200px;
+     margin: 0 auto 30px;
+     padding: 0 15px;
+     background: white;
+     border-radius: 0 0 var(--border-radius) var(--border-radius);
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search Box */
+.search-box {
+     display: flex;
+     align-items: center;
+     max-width: 500px;
+     margin: 30px auto 30px;
+     background: white;
+     border-radius: var(--border-radius);
+     box-shadow: var(--box-shadow);
+     overflow: hidden;
+     border: 2px solid var(--secondary-color);
+}
+
+.search-input {
+     flex: 1;
+     padding: 12px 20px;
+     border: none;
+     font-size: 16px;
+     outline: none;
+     background: transparent;
+     margin: 0;
+}
+
+.search-button {
+     background-color: var(--primary-color);
+     color: white;
+     border: none;
+     padding: 12px 20px;
+     cursor: pointer;
+     transition: background-color 0.3s;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     min-width: 50px;
+     height: 100%;
+     margin: 0;
+}
+
+.search-button:hover {
+     background-color: #3367d6;
+}
+
+.search-button svg {
+     font-size: 18px;
+}
+
+/* Current Weather */
+.current-weather {
+     background-color: white;
+     border-radius: var(--border-radius);
+     padding: 30px;
+     margin-bottom: 30px;
+     box-shadow: var(--box-shadow);
+     display: flex;
+     flex-direction: column;
+     gap: 20px;
+}
+
+.city-info {
+     display: flex;
+     align-items: center;
+     padding-bottom: 15px;
+     border-bottom: 1px solid #eee;
+}
+
+.city-name {
+     margin: 0;
+     font-size: 34px;
+     font-weight: bold;
+     color: var(--text-color);
+}
+
+.date-time {
+     margin-left: auto;
+     align-self: flex-end;
+     display: flex;
+     gap: 10px;
+     color: #666;
+     font-size: 24px;
+}
+
+.weather-info {
+     display: flex;
+     align-items: center;
+     gap: 20px;
+     padding: 20px 0;
+}
+
+.temperature-main {
+     font-size: 48px;
+     font-weight: bold;
+     color: var(--primary-color);
+}
+
+.weather-icon {
+     width: 60px;
+     height: 60px;
+     color: var(--primary-color);
+}
+
+.weather-description {
+     font-size: 20px;
+     color: #666;
+}
+
+.weather-details {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     flex-wrap: wrap;
+     gap: 15px;
+     padding-top: 15px;
+     border-top: 1px solid #eee;
+}
+
+.detail-item {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+     padding: 15px;
+     background-color: var(--secondary-color);
+     border-radius: var(--border-radius);
+}
+
+.detail-item svg {
+     font-size: 24px;
+     color: var(--primary-color);
+}
+
+/* Forecast */
+.forecast {
+     display: flex;
+     justify-content: space-between;
+     
+     flex-wrap: wrap;
+     gap: 10px;
+     margin-top: 30px;
+}
+
+.forecast-item {
+     width: 170px;
+     background-color: white;
+     border-radius: var(--border-radius);
+     padding: 20px;
+     text-align: center;
+     box-shadow: var(--box-shadow);
+}
+
+.forecast-date {
+     font-weight: bold;
+     margin-bottom: 10px;
+}
+
+.forecast-temp {
+     font-size: 24px;
+     color: var(--primary-color);
+     margin: 10px 0;
+}
+
+.forecast-desc {
+     color: #666;
+}
+
+/* Favorites */
+.favorites-list {
+     display: grid;
+     gap: 15px;
+     margin-top: 30px;
+}
+
+.favorite-item {
+     background-color: white;
+     border-radius: var(--border-radius);
+     padding: 15px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     box-shadow: var(--box-shadow);
+}
+
+.favorite-city {
+     text-decoration: none;
+     color: var(--text-color);
+     font-size: 18px;
+}
+
+.favorite-city:hover {
+     color: var(--primary-color);
+}
+
+.favorite-button {
+     background: none;
+     border: none;
+     color: #ffd700;
+     font-size: 24px;
+     cursor: pointer;
+     padding: 8px;
+     transition: transform 0.2s;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+.favorite-button:hover {
+     transform: scale(1.1);
+}
+
+.remove-favorite {
+     background: none;
+     border: none;
+     color: #dc3545;
+     cursor: pointer;
+     padding: 8px;
+     border-radius: 50%;
+     transition: background-color 0.3s;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+.remove-favorite:hover {
+     background-color: rgba(220, 53, 69, 0.1);
+}
+
+.no-favorites {
+     text-align: center;
+     padding: 30px;
+     background: white;
+     border-radius: var(--border-radius);
+     box-shadow: var(--box-shadow);
+}
+
+.no-favorites p {
+     margin-bottom: 15px;
+     color: #666;
+}
+
+.no-favorites .nav-link {
+     display: inline-block;
+     margin-top: 1rem;
+     background-color: var(--primary-color);
+     color: white;
+}
+
+.no-favorites .nav-link:hover {
+     background-color: #3367d6;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+
+
+     .search-box {
+          width: 100%;
+     }
+
+     .search-button {
+          width: auto;
+     }
+
+     .city-info {
+          flex-wrap: wrap;
+     }
+
+     .weather-info {
+          flex-direction: column;
+          text-align: center;
+          gap: 10px;
+     }
+
+     .weather-details {
+          grid-template-columns: 1fr;
+     }
+
+     .forecast {
+          justify-content: flex-start;
+
+     }
+
+     .container {
+          width: 100%;
+          padding: 0 10px;
+     }
+}
+
+@media (max-width: 480px) {
+     .city-name {
+          font-size: 20px;
+     }
+
+     .temperature-main {
+          font-size: 36px;
+     }
+
+     .weather-icon {
+          width: 40px;
+          height: 40px;
+     }
+
+     .detail-item {
+          padding: 10px;
+          font-size: 14px;
+     }
+
+     .forecast-item {
+          width: 100%;
+          padding: 10px;
+     }
+
+     .forecast-temp {
+          font-size: 20px;
+     }
+}

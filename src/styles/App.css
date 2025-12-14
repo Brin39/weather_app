@@ -1,0 +1,202 @@
+:root {
+     --primary-color: #4285f4;
+     --secondary-color: #f8f9fa;
+     --text-color: #333;
+     --text-secondary: #666;
+     --border-radius: 8px;
+     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+     --card-bg: #ffffff;
+}
+
+body {
+     font-family: 'Roboto', sans-serif;
+     background: #f4f4f4;
+     margin: 0;
+     padding: 0;
+     color: var(--text-color);
+     font-size: 16px;
+}
+
+/* Общие утилиты */
+.loading {
+     text-align: center;
+     color: var(--text-secondary);
+     padding: 20px;
+}
+
+.error {
+     text-align: center;
+     color: #ff4444;
+     padding: 20px;
+}
+
+.welcome-message {
+     text-align: center;
+     padding: 40px;
+     background: var(--card-bg);
+     border-radius: var(--border-radius);
+     box-shadow: var(--box-shadow);
+}
+
+.welcome-message h2 {
+     color: var(--text-color);
+     margin-bottom: 15px;
+}
+
+.welcome-message p {
+     color: var(--text-secondary);
+}
+
+/* ============================================
+   Skeleton Loading Styles
+   ============================================ */
+
+/* Base skeleton with shimmer animation */
+.skeleton {
+     background: linear-gradient(90deg,
+               #e0e0e0 25%,
+               #f0f0f0 50%,
+               #e0e0e0 75%);
+     background-size: 200% 100%;
+     animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+     0% {
+          background-position: 200% 0;
+     }
+
+     100% {
+          background-position: -200% 0;
+     }
+}
+
+/* Skeleton text lines */
+.skeleton-text {
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+}
+
+.skeleton-line {
+     margin-bottom: 4px;
+}
+
+/* Weather card skeleton adjustments */
+.skeleton-weather .city-info {
+     display: flex;
+     align-items: center;
+     gap: 15px;
+}
+
+.skeleton-weather .weather-info {
+     display: flex;
+     align-items: center;
+     gap: 20px;
+     padding: 20px 0;
+}
+
+.skeleton-weather .weather-details {
+     display: flex;
+     gap: 15px;
+     flex-wrap: wrap;
+}
+
+/* Forecast skeleton */
+.skeleton-forecast-item {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 10px;
+     padding: 20px;
+}
+
+/* Favorite card skeleton */
+.skeleton-favorite {
+     pointer-events: none;
+}
+
+.skeleton-favorite .favorite-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+}
+
+.skeleton-favorite .favorite-weather {
+     display: flex;
+     align-items: center;
+     gap: 15px;
+     margin-top: 15px;
+}
+
+/* ============================================
+   Error Boundary Styles
+   ============================================ */
+
+.error-boundary {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     min-height: 300px;
+     padding: 20px;
+}
+
+.error-boundary-content {
+     text-align: center;
+     background: var(--card-bg);
+     padding: 40px;
+     border-radius: var(--border-radius);
+     box-shadow: var(--box-shadow);
+     max-width: 500px;
+}
+
+.error-boundary-content h2 {
+     color: var(--text-color);
+     margin-bottom: 15px;
+     font-size: 1.5rem;
+}
+
+.error-boundary-content p {
+     color: var(--text-secondary);
+     margin-bottom: 20px;
+}
+
+.error-details {
+     text-align: left;
+     margin: 20px 0;
+     padding: 15px;
+     background: #f8f8f8;
+     border-radius: var(--border-radius);
+     border: 1px solid #e0e0e0;
+}
+
+.error-details summary {
+     cursor: pointer;
+     color: var(--text-secondary);
+     font-size: 0.9rem;
+}
+
+.error-details pre {
+     margin-top: 10px;
+     padding: 10px;
+     background: #fff;
+     border-radius: 4px;
+     overflow-x: auto;
+     font-size: 0.85rem;
+     color: #d32f2f;
+}
+
+.error-boundary-button {
+     background: var(--primary-color);
+     color: white;
+     border: none;
+     padding: 12px 24px;
+     border-radius: var(--border-radius);
+     font-size: 1rem;
+     cursor: pointer;
+     transition: background-color 0.2s;
+}
+
+.error-boundary-button:hover {
+     background: #3367d6;
+}

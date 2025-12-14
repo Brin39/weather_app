@@ -1,0 +1,150 @@
+.container {
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 20px;
+}
+
+h1 {
+     text-align: center;
+     margin-bottom: 30px;
+     color: var(--text-color);
+}
+
+.favorites-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+     gap: 20px;
+     padding: 20px;
+}
+
+.favorite-card {
+     background: var(--card-bg);
+     border-radius: 15px;
+     padding: 20px;
+     cursor: pointer;
+     transition: transform 0.2s, box-shadow 0.2s;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.favorite-header {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 15px;
+}
+
+.favorite-header h2 {
+     margin: 0;
+     font-size: 24px;
+     color: var(--text-color);
+}
+
+.remove-favorite {
+     background: none;
+     border: none;
+     color: var(--text-color);
+     cursor: pointer;
+     padding: 5px;
+     transition: color 0.2s;
+}
+
+.remove-favorite:hover {
+     color: #ff4444;
+}
+
+.favorite-date {
+     font-size: 16px;
+     color: var(--text-secondary);
+     margin-bottom: 15px;
+}
+
+.favorite-weather {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 10px;
+}
+
+.weather-icon {
+     font-size: 48px;
+     color: var(--primary-color);
+}
+
+.favorite-temp {
+     font-size: 32px;
+     font-weight: bold;
+     color: var(--text-color);
+}
+
+.favorite-desc {
+     font-size: 18px;
+     color: var(--text-secondary);
+     text-align: center;
+}
+
+.loading {
+     text-align: center;
+     color: var(--text-secondary);
+     padding: 20px;
+}
+
+.no-favorites {
+     text-align: center;
+     padding: 40px;
+     background: var(--card-bg);
+     border-radius: 15px;
+     margin-top: 20px;
+     box-shadow: none;
+}
+
+.no-favorites p {
+     font-size: 18px;
+     color: var(--text-secondary);
+     margin-bottom: 20px;
+}
+
+.back-button {
+     display: inline-block;
+     padding: 10px 20px;
+     background: var(--primary-color);
+     color: white;
+     text-decoration: none;
+     border-radius: 8px;
+     transition: background-color 0.2s;
+}
+
+.back-button:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+     .favorites-grid {
+          grid-template-columns: 1fr;
+          padding: 10px;
+     }
+
+     .favorite-card {
+          padding: 15px;
+     }
+
+     .favorite-header h2 {
+          font-size: 20px;
+     }
+
+     .weather-icon {
+          font-size: 36px;
+     }
+
+     .favorite-temp {
+          font-size: 28px;
+     }
+
+     .favorite-desc {
+          font-size: 16px;
+     }
+}
