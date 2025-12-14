@@ -1,0 +1,42 @@
+{
+     "app": {
+       "name": "Погода"
+     },
+     "nav": {
+       "home": "Главная",
+       "favorites": "Избранное"
+     },
+     "home": {
+       "search_placeholder": "Введите название города...",
+       "welcome_title": "Добро пожаловать в приложение Погода",
+       "welcome_text": "Найдите город, чтобы узнать погоду",
+       "use_my_location": "Мое местоположение",
+       "location_detected": "Местоположение определено",
+       "today": "Сегодня"
+     },
+     "weather": {
+       "temperature": "Температура",
+       "feels_like": "ощущается как",
+       "pressure": "Давление",
+       "humidity": "Влажность",
+       "wind": "Ветер"
+     },
+     "favorites": {
+       "title": "Избранные города",
+       "no_favorites": "Нет избранных городов",
+       "go_home": "На главную",
+       "added": "добавлен в избранное",
+       "removed": "удален из избранного"
+     },
+     "errors": {
+       "city_not_found": "Город не найден",
+       "loading_error": "Ошибка загрузки погоды",
+       "geolocation_denied": "Доступ к местоположению запрещён",
+       "geolocation_unavailable": "Местоположение недоступно",
+       "geolocation_timeout": "Время ожидания истекло"
+     },
+     "theme": {
+       "switch_to_light": "Светлая тема",
+       "switch_to_dark": "Тёмная тема"
+     }
+   }

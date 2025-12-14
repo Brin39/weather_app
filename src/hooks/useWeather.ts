@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchLocationKey, fetchWeather, fetchForecast, fetchLocationByCoordinates } from '../services/weatherService';
+import { useTranslation } from 'react-i18next';
+import { fetchLocationKey, fetchWeather, fetchForecast, fetchLocationByCoordinates, getApiLanguage } from '../services/weatherService';
 import type { CurrentWeather, DailyForecast, LocationSearchResult } from '../types';
 
 // ============================================
@@ -17,11 +18,11 @@ import type { CurrentWeather, DailyForecast, LocationSearchResult } from '../typ
  */
 export const weatherKeys = {
   all: ['weather'] as const,
-  location: (city: string) => [...weatherKeys.all, 'location', city] as const,
-  geoposition: (lat: number, lon: number) => [...weatherKeys.all, 'geoposition', lat, lon] as const,
-  current: (locationKey: string) => [...weatherKeys.all, 'current', locationKey] as const,
-  forecast: (locationKey: string) => [...weatherKeys.all, 'forecast', locationKey] as const,
-  city: (city: string) => [...weatherKeys.all, 'city', city] as const,
+  location: (city: string, lang: string) => [...weatherKeys.all, 'location', city, lang] as const,
+  geoposition: (lat: number, lon: number, lang: string) => [...weatherKeys.all, 'geoposition', lat, lon, lang] as const,
+  current: (locationKey: string, lang: string) => [...weatherKeys.all, 'current', locationKey, lang] as const,
+  forecast: (locationKey: string, lang: string) => [...weatherKeys.all, 'forecast', locationKey, lang] as const,
+  city: (city: string, lang: string) => [...weatherKeys.all, 'city', city, lang] as const,
 };
 
 // ============================================
@@ -34,9 +35,12 @@ export const weatherKeys = {
  * @returns Query result with location key
  */
 export const useLocationKey = (city: string) => {
+  const { i18n } = useTranslation();
+  const apiLang = getApiLanguage(i18n.language);
+
   return useQuery({
-    queryKey: weatherKeys.location(city),
-    queryFn: () => fetchLocationKey(city),
+    queryKey: weatherKeys.location(city, apiLang),
+    queryFn: () => fetchLocationKey(city, apiLang),
     // Only fetch if city is provided
     enabled: !!city?.trim(),
     // Location keys don't change often, cache for longer
@@ -54,9 +58,12 @@ export const useLocationByCoordinates = (
   latitude: number | null,
   longitude: number | null
 ) => {
+  const { i18n } = useTranslation();
+  const apiLang = getApiLanguage(i18n.language);
+
   return useQuery<LocationSearchResult>({
-    queryKey: weatherKeys.geoposition(latitude || 0, longitude || 0),
-    queryFn: () => fetchLocationByCoordinates(latitude!, longitude!),
+    queryKey: weatherKeys.geoposition(latitude || 0, longitude || 0, apiLang),
+    queryFn: () => fetchLocationByCoordinates(latitude!, longitude!, apiLang),
     // Only fetch if both coordinates are provided
     enabled: latitude !== null && longitude !== null,
     // Location data doesn't change often
@@ -69,11 +76,14 @@ export const useLocationByCoordinates = (
  * @param locationKey - AccuWeather location key
  * @returns Query result with current weather data
  */
-export const useCurrentWeather = (locationKey: string | undefined) => {
+export const useCurrentWeather = (locationKey: string | null | undefined) => {
+  const { i18n } = useTranslation();
+  const apiLang = getApiLanguage(i18n.language);
+
   return useQuery({
-    queryKey: weatherKeys.current(locationKey || ''),
-    queryFn: () => fetchWeather(locationKey!),
-    // Only fetch if locationKey is provided
+    queryKey: weatherKeys.current(locationKey || '', apiLang),
+    queryFn: () => fetchWeather(locationKey!, apiLang),
+    // Only fetch if locationKey is provided and not null
     enabled: !!locationKey,
   });
 };
@@ -83,11 +93,14 @@ export const useCurrentWeather = (locationKey: string | undefined) => {
  * @param locationKey - AccuWeather location key
  * @returns Query result with forecast data
  */
-export const useForecast = (locationKey: string | undefined) => {
+export const useForecast = (locationKey: string | null | undefined) => {
+  const { i18n } = useTranslation();
+  const apiLang = getApiLanguage(i18n.language);
+
   return useQuery({
-    queryKey: weatherKeys.forecast(locationKey || ''),
-    queryFn: () => fetchForecast(locationKey!),
-    // Only fetch if locationKey is provided
+    queryKey: weatherKeys.forecast(locationKey || '', apiLang),
+    queryFn: () => fetchForecast(locationKey!, apiLang),
+    // Only fetch if locationKey is provided and not null
     enabled: !!locationKey,
   });
 };
@@ -175,18 +188,21 @@ export const useWeatherByCity = (city: string): WeatherByCityResult => {
  * @returns Map of city name to weather data
  */
 export const useFavoritesWeather = (cities: string[]) => {
+  const { i18n } = useTranslation();
+  const apiLang = getApiLanguage(i18n.language);
+
   // Create a query for each city
   const queries = useQuery({
-    queryKey: ['favorites', ...cities],
+    queryKey: ['favorites', apiLang, ...cities],
     queryFn: async () => {
       // Fetch weather for all cities in parallel
       const results = await Promise.all(
         cities.map(async (city) => {
           try {
-            const locationKey = await fetchLocationKey(city);
+            const locationKey = await fetchLocationKey(city, apiLang);
             if (!locationKey) return { city, weather: null };
 
-            const weatherData = await fetchWeather(locationKey);
+            const weatherData = await fetchWeather(locationKey, apiLang);
             return { city, weather: weatherData[0] };
           } catch {
             return { city, weather: null };

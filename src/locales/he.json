@@ -1,0 +1,42 @@
+{
+     "app": {
+       "name": "מזג אוויר"
+     },
+     "nav": {
+       "home": "בית",
+       "favorites": "מועדפים"
+     },
+     "home": {
+       "search_placeholder": "הזן שם עיר...",
+       "welcome_title": "ברוכים הבאים לאפליקציית מזג האוויר",
+       "welcome_text": "חפש עיר כדי לקבל מידע על מזג האוויר",
+       "use_my_location": "המיקום שלי",
+       "location_detected": "המיקום זוהה",
+       "today": "היום"
+     },
+     "weather": {
+       "temperature": "טמפרטורה",
+       "feels_like": "מרגיש כמו",
+       "pressure": "לחץ",
+       "humidity": "לחות",
+       "wind": "רוח"
+     },
+     "favorites": {
+       "title": "ערים מועדפות",
+       "no_favorites": "אין ערים מועדפות",
+       "go_home": "חזרה לבית",
+       "added": "נוסף למועדפים",
+       "removed": "הוסר מהמועדפים"
+     },
+     "errors": {
+       "city_not_found": "העיר לא נמצאה",
+       "loading_error": "שגיאה בטעינת מזג האוויר",
+       "geolocation_denied": "הגישה למיקום נדחתה",
+       "geolocation_unavailable": "מידע המיקום אינו זמין",
+       "geolocation_timeout": "הזמן הקצוב למיקום פג"
+     },
+     "theme": {
+       "switch_to_light": "מצב בהיר",
+       "switch_to_dark": "מצב כהה"
+     }
+   }

@@ -10,6 +10,7 @@ import { useTemperature } from '../contexts/TemperatureContext';
 import { getWeatherIcon } from '../components/weatherIcons';
 import { useWeatherByCity, useLocationByCoordinates } from '../hooks/useWeather';
 import { useGeolocation } from '../hooks/useGeolocation';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Home page component
@@ -35,26 +36,27 @@ const HomePage = () => {
   // Context hooks
   const { isCelsius, convertTemp } = useTemperature();
   const { favorites, addFavorite, removeFavorite } = useFavorites();
+  const { t, i18n } = useTranslation();
 
   // React Query hook - ALL data fetching in one line!
   const { weather, forecast, isLoading, isError, error } = useWeatherByCity(searchCity);
 
   // Geolocation hooks
-const {
-  position,
-  error: geoError,
-  isLoading: isGeoLoading,
-  getPosition,
-} = useGeolocation();
+  const {
+    position,
+    error: geoError,
+    isLoading: isGeoLoading,
+    getPosition,
+  } = useGeolocation();
 
-// Get location data from coordinates
-const locationQuery = useLocationByCoordinates(
-  position?.latitude ?? null,
-  position?.longitude ?? null
-);
+  // Get location data from coordinates
+  const locationQuery = useLocationByCoordinates(
+    position?.latitude ?? null,
+    position?.longitude ?? null
+  );
 
-// Track if we've tried geolocation
-const [geoAttempted, setGeoAttempted] = useState(false);
+  // Track if we've tried geolocation
+  const [geoAttempted, setGeoAttempted] = useState(false);
 
   // Update time every second
   useEffect(() => {
@@ -64,14 +66,14 @@ const [geoAttempted, setGeoAttempted] = useState(false);
     return () => clearInterval(timer);
   }, []);
 
-// Auto-request geolocation on first load
-useEffect(() => {
-  // Only request if no city is set and haven't tried yet
-  if (!searchCity && !geoAttempted) {
-    setGeoAttempted(true);
-    getPosition();
-  }
-}, [searchCity, geoAttempted, getPosition]);
+  // Auto-request geolocation on first load
+  useEffect(() => {
+    // Only request if no city is set and haven't tried yet
+    if (!searchCity && !geoAttempted) {
+      setGeoAttempted(true);
+      getPosition();
+    }
+  }, [searchCity, geoAttempted, getPosition]);
 
   // Handle city from URL (when clicking from favorites)
   useEffect(() => {
@@ -83,37 +85,37 @@ useEffect(() => {
   }, [location.search]);
 
   // Handle geolocation result
-useEffect(() => {
-  if (locationQuery.data?.LocalizedName) {
-    setSearchCity(locationQuery.data.LocalizedName);
-    toast.success(`Location detected: ${locationQuery.data.LocalizedName}`);
-  }
-}, [locationQuery.data]);
+  useEffect(() => {
+    if (locationQuery.data?.LocalizedName) {
+      setSearchCity(locationQuery.data.LocalizedName);
+      toast.success(`${t('home.location_detected')}: ${locationQuery.data.LocalizedName}`);
+    }
+  }, [locationQuery.data, t]);
 
-// Handle geolocation errors (silent - just log, don't show toast on auto-request)
-useEffect(() => {
-  if (geoError && geoAttempted) {
-    console.log('Geolocation error:', geoError);
-    // Toast only shown if user explicitly clicked the button
-  }
-}, [geoError, geoAttempted]);
+  // Handle geolocation errors (silent - just log, don't show toast on auto-request)
+  useEffect(() => {
+    if (geoError && geoAttempted) {
+      console.log('Geolocation error:', geoError);
+      // Toast only shown if user explicitly clicked the button
+    }
+  }, [geoError, geoAttempted]);
 
   // Show error toast when error occurs
   useEffect(() => {
     if (isError && error) {
-      toast.error(error.message || 'Error loading weather');
+      toast.error(error.message || t('errors.loading_error'));
     }
-  }, [isError, error]);
+  }, [isError, error, t]);
 
   // Show "city not found" if query completed but no weather data
   useEffect(() => {
     if (searchCity && !isLoading && !weather && !isError) {
-      toast.error('City not found');
+      toast.error(t('errors.city_not_found'));
     }
-  }, [searchCity, isLoading, weather, isError]);
+  }, [searchCity, isLoading, weather, isError, t]);
 
   /**
-   * Format date for display
+   * Format date for display (uses current language)
    */
   const formatDate = (date: string): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -121,14 +123,14 @@ useEffect(() => {
       day: 'numeric',
       month: 'long',
     };
-    return new Date(date).toLocaleDateString('en-US', options);
+    return new Date(date).toLocaleDateString(i18n.language, options);
   };
 
   /**
-   * Format time for display
+   * Format time for display (uses current language)
    */
   const formatTime = (date: Date): string => {
-    return date.toLocaleTimeString('en-US', {
+    return date.toLocaleTimeString(i18n.language, {
       hour: '2-digit',
       minute: '2-digit',
     });
@@ -140,10 +142,10 @@ useEffect(() => {
   const handleFavoriteClick = () => {
     if (favorites.includes(searchCity)) {
       removeFavorite(searchCity);
-      toast.success(`${searchCity} removed from favorites`);
+      toast.success(`${searchCity} ${t('favorites.removed')}`);
     } else {
       addFavorite(searchCity);
-      toast.success(`${searchCity} added to favorites`);
+      toast.success(`${searchCity} ${t('favorites.added')}`);
     }
   };
 
@@ -170,7 +172,7 @@ useEffect(() => {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Enter city name..."
+            placeholder={t('home.search_placeholder')}
             className="search-input"
           />
           <button type="submit" className="search-button">
@@ -184,7 +186,7 @@ useEffect(() => {
             <ForecastSkeleton />
           </>
         ) : isError ? (
-          <div className="error">{error?.message || 'Error loading weather'}</div>
+          <div className="error">{error?.message || t('errors.loading_error')}</div>
         ) : weather ? (
           <div className="current-weather">
             <div className="city-info">
@@ -193,7 +195,7 @@ useEffect(() => {
               </button>
               <h1 className="city-name">{searchCity}</h1>
               <div className="date-time">
-                <span>Today</span>
+                <span>{t('home.today')}</span>
                 <span>{formatTime(currentTime)}</span>
               </div>
             </div>
@@ -210,9 +212,9 @@ useEffect(() => {
               <div className="detail-item">
                 <FaThermometerHalf />
                 <span>
-                  Temperature:{' '}
+                  {t('weather.temperature')}:{' '}
                   {Math.round(convertTemp(weather.Temperature?.Metric?.Value || 0))}°
-                  {isCelsius ? 'C' : 'F'} (feels like{' '}
+                  {isCelsius ? 'C' : 'F'} ({t('weather.feels_like')}{' '}
                   {Math.round(
                     convertTemp(weather.RealFeelTemperature?.Metric?.Value || 0)
                   )}
@@ -221,16 +223,16 @@ useEffect(() => {
               </div>
               <div className="detail-item">
                 <WiBarometer />
-                <span>Pressure: {weather.Pressure?.Metric?.Value || 0} hPa</span>
+                <span>{t('weather.pressure')}: {weather.Pressure?.Metric?.Value || 0} hPa</span>
               </div>
               <div className="detail-item">
                 <WiHumidity />
-                <span>Humidity: {weather.RelativeHumidity || 0}%</span>
+                <span>{t('weather.humidity')}: {weather.RelativeHumidity || 0}%</span>
               </div>
               <div className="detail-item">
                 <WiStrongWind />
                 <span>
-                  Wind: {weather.Wind?.Speed?.Metric?.Value || 0} m/s{' '}
+                  {t('weather.wind')}: {weather.Wind?.Speed?.Metric?.Value || 0} m/s{' '}
                   {weather.Wind?.Direction?.Localized || 'N/A'}
                 </span>
               </div>
@@ -238,8 +240,8 @@ useEffect(() => {
           </div>
         ) : (
           <div className="welcome-message">
-            <h2>Welcome to the Weather App</h2>
-            <p>Search for a city to get weather information</p>
+            <h2>{t('home.welcome_title')}</h2>
+            <p>{t('home.welcome_text')}</p>
             {geoError && (
               <button
                 onClick={() => {
@@ -247,7 +249,7 @@ useEffect(() => {
                 }}
                 className="geo-retry-button"
               >
-                <FaMapMarkerAlt /> Use my location
+                <FaMapMarkerAlt /> {t('home.use_my_location')}
               </button>
             )}
           </div>

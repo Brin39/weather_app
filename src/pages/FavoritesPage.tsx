@@ -8,6 +8,7 @@ import '../styles/FavoritesPage.css';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTemperature } from '../contexts/TemperatureContext';
 import { useFavoritesWeather } from '../hooks/useWeather';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Favorites page component
@@ -22,19 +23,20 @@ const FavoritesPage = () => {
   const navigate = useNavigate();
   const { favorites, removeFavorite } = useFavorites();
   const { convertTemp } = useTemperature();
+  const { t, i18n } = useTranslation();
 
   // React Query hook - fetches weather for ALL favorites in parallel!
   const { weatherData, isLoading, isError, error } = useFavoritesWeather(favorites);
 
   /**
-   * Format date for display
+   * Format date for display (uses current language)
    */
   const formatDate = (date: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       day: 'numeric',
     };
-    return new Date(date).toLocaleDateString('en-US', options);
+    return new Date(date).toLocaleDateString(i18n.language, options);
   };
 
   /**
@@ -57,7 +59,7 @@ const FavoritesPage = () => {
       <Header currentPage="favorites" />
       {isLoading ? (
         <div className="container">
-          <h1>Favorite Cities</h1>
+          <h1>{t('favorites.title')}</h1>
           <div className="favorites-grid">
             {favorites.map((_, index) => (
               <FavoriteCardSkeleton key={index} />
@@ -65,15 +67,15 @@ const FavoritesPage = () => {
           </div>
         </div>
       ) : isError ? (
-        <div className="error">{error?.message || 'Error loading weather data'}</div>
+        <div className="error">{error?.message || t('errors.loading_error')}</div>
       ) : (
         <div className="container">
-          <h1>Favorite Cities</h1>
+          <h1>{t('favorites.title')}</h1>
           {favorites.length === 0 ? (
             <div className="no-favorites">
-              <p>No favorites</p>
+              <p>{t('favorites.no_favorites')}</p>
               <Link to="/" className="back-button">
-                Search for cities
+                {t('favorites.go_home')}
               </Link>
             </div>
           ) : (
@@ -115,7 +117,7 @@ const FavoritesPage = () => {
                         </div>
                       </>
                     ) : (
-                      <div className="loading">Loading weather data...</div>
+                      <div className="loading">{t('errors.loading_error')}</div>
                     )}
                   </div>
                 );
