@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FaSearch, FaRegStar, FaStar, FaThermometerHalf } from 'react-icons/fa';
+import { FaSearch, FaRegStar, FaStar, FaThermometerHalf, FaMapMarkerAlt } from 'react-icons/fa';
 import { WiBarometer, WiHumidity, WiStrongWind } from 'react-icons/wi';
 import toast from 'react-hot-toast';
 import Header from '../components/Header';
@@ -8,7 +8,8 @@ import { WeatherCardSkeleton, ForecastSkeleton } from '../components/Skeleton';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTemperature } from '../contexts/TemperatureContext';
 import { getWeatherIcon } from '../components/weatherIcons';
-import { useWeatherByCity } from '../hooks/useWeather';
+import { useWeatherByCity, useLocationByCoordinates } from '../hooks/useWeather';
+import { useGeolocation } from '../hooks/useGeolocation';
 
 /**
  * Home page component
@@ -38,6 +39,23 @@ const HomePage = () => {
   // React Query hook - ALL data fetching in one line!
   const { weather, forecast, isLoading, isError, error } = useWeatherByCity(searchCity);
 
+  // Geolocation hooks
+const {
+  position,
+  error: geoError,
+  isLoading: isGeoLoading,
+  getPosition,
+} = useGeolocation();
+
+// Get location data from coordinates
+const locationQuery = useLocationByCoordinates(
+  position?.latitude ?? null,
+  position?.longitude ?? null
+);
+
+// Track if we've tried geolocation
+const [geoAttempted, setGeoAttempted] = useState(false);
+
   // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
@@ -45,6 +63,15 @@ const HomePage = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+// Auto-request geolocation on first load
+useEffect(() => {
+  // Only request if no city is set and haven't tried yet
+  if (!searchCity && !geoAttempted) {
+    setGeoAttempted(true);
+    getPosition();
+  }
+}, [searchCity, geoAttempted, getPosition]);
 
   // Handle city from URL (when clicking from favorites)
   useEffect(() => {
@@ -54,6 +81,22 @@ const HomePage = () => {
       setSearchCity(cityParam);
     }
   }, [location.search]);
+
+  // Handle geolocation result
+useEffect(() => {
+  if (locationQuery.data?.LocalizedName) {
+    setSearchCity(locationQuery.data.LocalizedName);
+    toast.success(`Location detected: ${locationQuery.data.LocalizedName}`);
+  }
+}, [locationQuery.data]);
+
+// Handle geolocation errors (silent - just log, don't show toast on auto-request)
+useEffect(() => {
+  if (geoError && geoAttempted) {
+    console.log('Geolocation error:', geoError);
+    // Toast only shown if user explicitly clicked the button
+  }
+}, [geoError, geoAttempted]);
 
   // Show error toast when error occurs
   useEffect(() => {
@@ -135,7 +178,7 @@ const HomePage = () => {
           </button>
         </form>
 
-        {isLoading ? (
+        {(isLoading || (isGeoLoading && !searchCity) || (locationQuery.isLoading && !searchCity)) ? (
           <>
             <WeatherCardSkeleton />
             <ForecastSkeleton />
@@ -197,6 +240,16 @@ const HomePage = () => {
           <div className="welcome-message">
             <h2>Welcome to the Weather App</h2>
             <p>Search for a city to get weather information</p>
+            {geoError && (
+              <button
+                onClick={() => {
+                  setGeoAttempted(false);
+                }}
+                className="geo-retry-button"
+              >
+                <FaMapMarkerAlt /> Use my location
+              </button>
+            )}
           </div>
         )}
 

@@ -171,3 +171,12 @@ export interface FavoriteCityWeather {
   city: string;
   weather: CurrentWeather;
 }
+
+/**
+ * Geographic coordinates from browser Geolocation API
+ * Used to get weather by user's current location
+ */
+export interface GeoPosition {
+  latitude: number;
+  longitude: number;
+}

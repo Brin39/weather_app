@@ -52,6 +52,33 @@ export const fetchLocationKey = async (city: string): Promise<string | undefined
 };
 
 /**
+ * Gets location information by geographic coordinates
+ * @param latitude - Geographic latitude (-90 to 90)
+ * @param longitude - Geographic longitude (-180 to 180)
+ * @returns Location data including Key and city name
+ */
+export const fetchLocationByCoordinates = async (
+  latitude: number,
+  longitude: number
+): Promise<LocationSearchResult> => {
+  try {
+    const response = await axios.get<LocationSearchResult>(
+      `${BASE_URL}/locations/v1/cities/geoposition/search`,
+      {
+        params: {
+          apikey: API_KEY,
+          q: `${latitude},${longitude}`,
+          language: 'en-us',
+        },
+      }
+    );
+    return response.data;
+  } catch {
+    throw new Error('Error getting location by coordinates');
+  }
+};
+
+/**
  * Fetches 5-day weather forecast for a location
  * @param locationKey - AccuWeather location key
  * @returns Forecast response with daily forecasts

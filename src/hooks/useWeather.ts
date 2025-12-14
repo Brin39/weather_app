@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchLocationKey, fetchWeather, fetchForecast } from '../services/weatherService';
-import type { CurrentWeather, DailyForecast } from '../types';
+import { fetchLocationKey, fetchWeather, fetchForecast, fetchLocationByCoordinates } from '../services/weatherService';
+import type { CurrentWeather, DailyForecast, LocationSearchResult } from '../types';
 
 // ============================================
 // Query Keys
@@ -18,6 +18,7 @@ import type { CurrentWeather, DailyForecast } from '../types';
 export const weatherKeys = {
   all: ['weather'] as const,
   location: (city: string) => [...weatherKeys.all, 'location', city] as const,
+  geoposition: (lat: number, lon: number) => [...weatherKeys.all, 'geoposition', lat, lon] as const,
   current: (locationKey: string) => [...weatherKeys.all, 'current', locationKey] as const,
   forecast: (locationKey: string) => [...weatherKeys.all, 'forecast', locationKey] as const,
   city: (city: string) => [...weatherKeys.all, 'city', city] as const,
@@ -39,6 +40,26 @@ export const useLocationKey = (city: string) => {
     // Only fetch if city is provided
     enabled: !!city?.trim(),
     // Location keys don't change often, cache for longer
+    staleTime: 30 * 60 * 1000, // 30 minutes
+  });
+};
+
+/**
+ * Hook to fetch location by geographic coordinates
+ * @param latitude - Geographic latitude
+ * @param longitude - Geographic longitude
+ * @returns Query result with location data
+ */
+export const useLocationByCoordinates = (
+  latitude: number | null,
+  longitude: number | null
+) => {
+  return useQuery<LocationSearchResult>({
+    queryKey: weatherKeys.geoposition(latitude || 0, longitude || 0),
+    queryFn: () => fetchLocationByCoordinates(latitude!, longitude!),
+    // Only fetch if both coordinates are provided
+    enabled: latitude !== null && longitude !== null,
+    // Location data doesn't change often
     staleTime: 30 * 60 * 1000, // 30 minutes
   });
 };

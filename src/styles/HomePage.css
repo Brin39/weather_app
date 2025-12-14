@@ -272,6 +272,27 @@ body {
      background-color: #3367d6;
 }
 
+   
+   /* Geolocation retry button */
+.geo-retry-button {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+     background-color: #4a90a4;
+     color: white;
+     border: none;
+     padding: 12px 24px;
+     margin-top: 20px;
+     cursor: pointer;
+     border-radius: 8px;
+     font-size: 1rem;
+     transition: background-color 0.2s ease;
+   }
+   
+   .geo-retry-button:hover {
+     background-color: #3a7a8a;
+   }
+
 /* Media Queries */
 @media (max-width: 768px) {
 
