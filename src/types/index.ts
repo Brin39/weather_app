@@ -180,3 +180,17 @@ export interface GeoPosition {
   latitude: number;
   longitude: number;
 }
+
+/**
+ * Theme type
+ */
+export type Theme = 'light' | 'dark';
+
+/**
+ * Theme context value
+ */
+export interface ThemeContextValue {
+  theme: Theme;
+  toggleTheme: () => void;
+  isDark: boolean;
+}

@@ -12,6 +12,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { Toaster } from 'react-hot-toast';
 import { FavoritesProvider } from './contexts/FavoritesContext';
 import { TemperatureProvider } from './contexts/TemperatureContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 // Create a QueryClient instance with default options
 const queryClient = new QueryClient({
@@ -37,19 +38,21 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <FavoritesProvider>
-          <TemperatureProvider>
-            <div className="app">
-              <ErrorBoundary>
+        <ThemeProvider>
+          <FavoritesProvider>
+            <TemperatureProvider>
+              <div className="app">
+               <ErrorBoundary>
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/favorites" element={<FavoritesPage />} />
                 </Routes>
-              </ErrorBoundary>
-              <Toaster position="top-right" />
-            </div>
-          </TemperatureProvider>
-        </FavoritesProvider>
+                </ErrorBoundary>
+               <Toaster position="top-right" />
+              </div>
+            </TemperatureProvider>
+          </FavoritesProvider>
+        </ThemeProvider>
       </Router>
       {/* DevTools - only visible in development */}
       <ReactQueryDevtools initialIsOpen={false} />

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import UnitToggle from './UnitToggle';
+import { useTheme } from '../contexts/ThemeContext';
 
 // Props interface for Header component
 interface HeaderProps {
@@ -11,6 +13,8 @@ interface HeaderProps {
  * Highlights the current active page in navigation
  */
 const Header = ({ currentPage }: HeaderProps) => {
+  const { toggleTheme, isDark } = useTheme();
+
   return (
     <header className="header">
       <div className="logo">Weather App</div>
@@ -29,6 +33,13 @@ const Header = ({ currentPage }: HeaderProps) => {
             Favorite
           </Link>
         </div>
+        <button
+          onClick={toggleTheme}
+          className="theme-toggle"
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? <FaSun /> : <FaMoon />}
+        </button>
         <UnitToggle />
       </div>
     </header>

@@ -1,27 +1,14 @@
-:root {
-     --primary-color: #4285f4;
-     --secondary-color: #f8f9fa;
-     --text-color: #333;
-     --border-radius: 8px;
-     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-body {
-     margin: 0;
-     font-family: 'Roboto', sans-serif;
-     background-color: #f0f2f5;
-     color: var(--text-color);
-     font-size: 16px;
-}
+/* HomePage uses variables from App.css */
 
 .container {
      width: 100%;
      max-width: 1200px;
      margin: 0 auto 30px;
      padding: 0 15px;
-     background: white;
+     background: var(--card-bg);
      border-radius: 0 0 var(--border-radius) var(--border-radius);
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+     box-shadow: var(--box-shadow);
+     transition: background-color 0.3s ease;
 }
 
 /* Search Box */
@@ -30,11 +17,12 @@ body {
      align-items: center;
      max-width: 500px;
      margin: 30px auto 30px;
-     background: white;
+     background: var(--card-bg);
      border-radius: var(--border-radius);
      box-shadow: var(--box-shadow);
      overflow: hidden;
      border: 2px solid var(--secondary-color);
+     transition: background-color 0.3s ease;
 }
 
 .search-input {
@@ -45,6 +33,11 @@ body {
      outline: none;
      background: transparent;
      margin: 0;
+     color: var(--text-color);
+}
+
+.search-input::placeholder {
+     color: var(--text-secondary);
 }
 
 .search-button {
@@ -72,7 +65,7 @@ body {
 
 /* Current Weather */
 .current-weather {
-     background-color: white;
+     background-color: var(--card-bg);
      border-radius: var(--border-radius);
      padding: 30px;
      margin-bottom: 30px;
@@ -80,13 +73,14 @@ body {
      display: flex;
      flex-direction: column;
      gap: 20px;
+     transition: background-color 0.3s ease;
 }
 
 .city-info {
      display: flex;
      align-items: center;
      padding-bottom: 15px;
-     border-bottom: 1px solid #eee;
+     border-bottom: 1px solid var(--secondary-color);
 }
 
 .city-name {
@@ -101,7 +95,7 @@ body {
      align-self: flex-end;
      display: flex;
      gap: 10px;
-     color: #666;
+     color: var(--text-secondary);
      font-size: 24px;
 }
 
@@ -126,7 +120,7 @@ body {
 
 .weather-description {
      font-size: 20px;
-     color: #666;
+     color: var(--text-secondary);
 }
 
 .weather-details {
@@ -136,7 +130,7 @@ body {
      flex-wrap: wrap;
      gap: 15px;
      padding-top: 15px;
-     border-top: 1px solid #eee;
+     border-top: 1px solid var(--secondary-color);
 }
 
 .detail-item {
@@ -157,7 +151,7 @@ body {
 .forecast {
      display: flex;
      justify-content: space-between;
-     
+
      flex-wrap: wrap;
      gap: 10px;
      margin-top: 30px;
@@ -165,11 +159,12 @@ body {
 
 .forecast-item {
      width: 170px;
-     background-color: white;
+     background-color: var(--card-bg);
      border-radius: var(--border-radius);
      padding: 20px;
      text-align: center;
      box-shadow: var(--box-shadow);
+     transition: background-color 0.3s ease;
 }
 
 .forecast-date {
@@ -184,7 +179,7 @@ body {
 }
 
 .forecast-desc {
-     color: #666;
+     color: var(--text-secondary);
 }
 
 /* Favorites */
@@ -195,13 +190,14 @@ body {
 }
 
 .favorite-item {
-     background-color: white;
+     background-color: var(--card-bg);
      border-radius: var(--border-radius);
      padding: 15px;
      display: flex;
      justify-content: space-between;
      align-items: center;
      box-shadow: var(--box-shadow);
+     transition: background-color 0.3s ease;
 }
 
 .favorite-city {
@@ -251,14 +247,15 @@ body {
 .no-favorites {
      text-align: center;
      padding: 30px;
-     background: white;
+     background: var(--card-bg);
      border-radius: var(--border-radius);
      box-shadow: var(--box-shadow);
+     transition: background-color 0.3s ease;
 }
 
 .no-favorites p {
      margin-bottom: 15px;
-     color: #666;
+     color: var(--text-secondary);
 }
 
 .no-favorites .nav-link {
@@ -272,8 +269,8 @@ body {
      background-color: #3367d6;
 }
 
-   
-   /* Geolocation retry button */
+
+/* Geolocation retry button */
 .geo-retry-button {
      display: inline-flex;
      align-items: center;
@@ -287,11 +284,11 @@ body {
      border-radius: 8px;
      font-size: 1rem;
      transition: background-color 0.2s ease;
-   }
-   
-   .geo-retry-button:hover {
+}
+
+.geo-retry-button:hover {
      background-color: #3a7a8a;
-   }
+}
 
 /* Media Queries */
 @media (max-width: 768px) {

@@ -3,7 +3,8 @@
      justify-content: space-between;
      align-items: center;
      padding: 15px 30px;
-     background-color: white;
+     background-color: var(--card-bg);
+     transition: background-color 0.3s ease;
 }
 
 .logo {
@@ -97,7 +98,31 @@
 }
 
 .unit-toggle:hover {
-     background-color: #e9ecef;
+     background-color: var(--skeleton-base);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+     background: var(--secondary-color);
+     border: none;
+     color: var(--text-color);
+     font-size: 1.2rem;
+     cursor: pointer;
+     padding: 8px 12px;
+     border-radius: var(--border-radius);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+     background: var(--skeleton-base);
+     transform: scale(1.05);
+}
+
+.theme-toggle:active {
+     transform: scale(0.95);
 }
 
 .unit-toggle svg {
@@ -137,7 +162,7 @@
 }
 
 @media (max-width: 480px) {
-     .header{
+     .header {
           flex-direction: column;
           padding: 15px;
           gap: 15px;

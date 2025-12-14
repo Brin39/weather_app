@@ -1,3 +1,7 @@
+/* ============================================
+   Theme Variables
+   ============================================ */
+
 :root {
      --primary-color: #4285f4;
      --secondary-color: #f8f9fa;
@@ -6,15 +10,36 @@
      --border-radius: 8px;
      --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
      --card-bg: #ffffff;
+     --bg-color: #f4f4f4;
+     --skeleton-base: #e0e0e0;
+     --skeleton-highlight: #f0f0f0;
+     --error-details-bg: #f8f8f8;
+     --error-details-border: #e0e0e0;
+}
+
+/* Dark theme overrides */
+body.dark-theme {
+     --primary-color: #64b5f6;
+     --secondary-color: #2d2d44;
+     --text-color: #e0e0e0;
+     --text-secondary: #a0a0a0;
+     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+     --card-bg: #1e1e2f;
+     --bg-color: #121220;
+     --skeleton-base: #2a2a3e;
+     --skeleton-highlight: #3a3a4e;
+     --error-details-bg: #2a2a3e;
+     --error-details-border: #3a3a4e;
 }
 
 body {
      font-family: 'Roboto', sans-serif;
-     background: #f4f4f4;
+     background: var(--bg-color);
      margin: 0;
      padding: 0;
      color: var(--text-color);
      font-size: 16px;
+     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Общие утилиты */
@@ -54,9 +79,9 @@ body {
 /* Base skeleton with shimmer animation */
 .skeleton {
      background: linear-gradient(90deg,
-               #e0e0e0 25%,
-               #f0f0f0 50%,
-               #e0e0e0 75%);
+               var(--skeleton-base) 25%,
+               var(--skeleton-highlight) 50%,
+               var(--skeleton-base) 75%);
      background-size: 200% 100%;
      animation: skeleton-shimmer 1.5s ease-in-out infinite;
 }
@@ -165,9 +190,9 @@ body {
      text-align: left;
      margin: 20px 0;
      padding: 15px;
-     background: #f8f8f8;
+     background: var(--error-details-bg);
      border-radius: var(--border-radius);
-     border: 1px solid #e0e0e0;
+     border: 1px solid var(--error-details-border);
 }
 
 .error-details summary {
@@ -179,11 +204,11 @@ body {
 .error-details pre {
      margin-top: 10px;
      padding: 10px;
-     background: #fff;
+     background: var(--card-bg);
      border-radius: 4px;
      overflow-x: auto;
      font-size: 0.85rem;
-     color: #d32f2f;
+     color: #ff6b6b;
 }
 
 .error-boundary-button {
