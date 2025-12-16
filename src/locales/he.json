@@ -21,13 +21,14 @@
        "humidity": "לחות",
        "wind": "רוח"
      },
-     "favorites": {
-       "title": "ערים מועדפות",
-       "no_favorites": "אין ערים מועדפות",
-       "go_home": "חזרה לבית",
-       "added": "נוסף למועדפים",
-       "removed": "הוסר מהמועדפים"
-     },
+"favorites": {
+    "title": "ערים מועדפות",
+    "no_favorites": "אין ערים מועדפות",
+    "go_home": "חזרה לבית",
+    "added": "נוסף למועדפים",
+    "removed": "הוסר מהמועדפים",
+    "show_weather": "הצג מזג אוויר ב{{city}}"
+  },
      "errors": {
        "city_not_found": "העיר לא נמצאה",
        "loading_error": "שגיאה בטעינת מזג האוויר",

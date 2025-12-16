@@ -24,6 +24,8 @@ h1 {
      cursor: pointer;
      transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
      box-shadow: var(--box-shadow);
+     position: relative;
+     overflow: hidden;
 }
 
 .favorite-card:hover {
@@ -31,11 +33,42 @@ h1 {
      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+.favorite-card:hover .favorite-hover-text {
+     opacity: 1;
+     transform: translateY(0);
+}
+
+/* Skeleton card for loading state */
+.skeleton-card {
+     height: 80px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+
+.skeleton-card .skeleton-text {
+     width: 60%;
+     height: 24px;
+}
+
 .favorite-header {
      display: flex;
      justify-content: space-between;
      align-items: center;
-     margin-bottom: 15px;
+}
+
+/* Hover text that appears on card hover */
+.favorite-hover-text {
+     margin-top: 15px;
+     padding: 10px;
+     background: var(--primary-color);
+     color: white;
+     border-radius: 8px;
+     text-align: center;
+     font-size: 14px;
+     opacity: 0;
+     transform: translateY(10px);
+     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .favorite-header h2 {

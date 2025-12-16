@@ -106,6 +106,34 @@ export const fetchLocationByCoordinates = async (
 };
 
 /**
+ * Gets location information by location key
+ * Used to get localized city names
+ * @param locationKey - AccuWeather location key
+ * @param language - Language code for localized response
+ * @returns Location data including localized city name
+ */
+export const fetchLocationByKey = async (
+  locationKey: string,
+  language: string = 'en-us'
+): Promise<LocationSearchResult> => {
+  if (!locationKey) {
+    throw new Error('Location key is required');
+  }
+
+  try {
+    const response = await axios.get<LocationSearchResult>(
+      `${BASE_URL}/locations/v1/${locationKey}`,
+      {
+        params: { apikey: API_KEY, language },
+      }
+    );
+    return response.data;
+  } catch {
+    throw new Error('Error getting location by key');
+  }
+};
+
+/**
  * Fetches 5-day weather forecast for a location
  * @param locationKey - AccuWeather location key
  * @param language - Language code for localized response

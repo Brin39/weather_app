@@ -1,42 +1,43 @@
 {
-     "app": {
-       "name": "Weather App"
-     },
-     "nav": {
-       "home": "Home",
-       "favorites": "Favorites"
-     },
-     "home": {
-       "search_placeholder": "Enter city name...",
-       "welcome_title": "Welcome to the Weather App",
-       "welcome_text": "Search for a city to get weather information",
-       "use_my_location": "Use my location",
-       "location_detected": "Location detected",
-       "today": "Today"
-     },
-     "weather": {
-       "temperature": "Temperature",
-       "feels_like": "feels like",
-       "pressure": "Pressure",
-       "humidity": "Humidity",
-       "wind": "Wind"
-     },
-     "favorites": {
-       "title": "Favorite Cities",
-       "no_favorites": "No favorite cities yet",
-       "go_home": "Go to Home",
-       "added": "added to favorites",
-       "removed": "removed from favorites"
-     },
-     "errors": {
-       "city_not_found": "City not found",
-       "loading_error": "Error loading weather",
-       "geolocation_denied": "Location access denied by user",
-       "geolocation_unavailable": "Location information unavailable",
-       "geolocation_timeout": "Location request timed out"
-     },
-     "theme": {
-       "switch_to_light": "Switch to light mode",
-       "switch_to_dark": "Switch to dark mode"
-     }
-   }
+  "app": {
+    "name": "Weather App"
+  },
+  "nav": {
+    "home": "Home",
+    "favorites": "Favorites"
+  },
+  "home": {
+    "search_placeholder": "Enter city name...",
+    "welcome_title": "Welcome to the Weather App",
+    "welcome_text": "Search for a city to get weather information",
+    "use_my_location": "Use my location",
+    "location_detected": "Location detected",
+    "today": "Today"
+  },
+  "weather": {
+    "temperature": "Temperature",
+    "feels_like": "feels like",
+    "pressure": "Pressure",
+    "humidity": "Humidity",
+    "wind": "Wind"
+  },
+  "favorites": {
+    "title": "Favorite Cities",
+    "no_favorites": "No favorite cities yet",
+    "go_home": "Go to Home",
+    "added": "added to favorites",
+    "removed": "removed from favorites",
+    "show_weather": "Show weather in {{city}}"
+  },
+  "errors": {
+    "city_not_found": "City not found",
+    "loading_error": "Error loading weather",
+    "geolocation_denied": "Location access denied by user",
+    "geolocation_unavailable": "Location information unavailable",
+    "geolocation_timeout": "Location request timed out"
+  },
+  "theme": {
+    "switch_to_light": "Switch to light mode",
+    "switch_to_dark": "Switch to dark mode"
+  }
+}

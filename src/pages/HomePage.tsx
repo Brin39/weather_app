@@ -35,11 +35,11 @@ const HomePage = () => {
 
   // Context hooks
   const { isCelsius, convertTemp } = useTemperature();
-  const { favorites, addFavorite, removeFavorite } = useFavorites();
+  const { favorites, addFavorite, removeFavorite, isFavorite, lastViewedCity, setLastViewedCity } = useFavorites();
   const { t, i18n } = useTranslation();
 
   // React Query hook - ALL data fetching in one line!
-  const { weather, forecast, isLoading, isError, error } = useWeatherByCity(searchCity);
+  const { weather, forecast, locationKey, localizedCityName, isLoading, isError, error } = useWeatherByCity(searchCity);
 
   // Geolocation hooks
   const {
@@ -92,13 +92,22 @@ const HomePage = () => {
     }
   }, [locationQuery.data, t]);
 
-  // Handle geolocation errors (silent - just log, don't show toast on auto-request)
+  // Handle geolocation errors - fallback to lastViewedCity or first favorite
   useEffect(() => {
-    if (geoError && geoAttempted) {
+    if (geoError && geoAttempted && !searchCity) {
       console.log('Geolocation error:', geoError);
-      // Toast only shown if user explicitly clicked the button
+
+      // Try lastViewedCity first (use defaultName for search)
+      if (lastViewedCity) {
+        setSearchCity(lastViewedCity.defaultName);
+      }
+      // Then try first favorite
+      else if (favorites.length > 0) {
+        setSearchCity(favorites[0].defaultName);
+      }
+      // Otherwise show welcome message (no city set)
     }
-  }, [geoError, geoAttempted]);
+  }, [geoError, geoAttempted, searchCity, lastViewedCity, favorites]);
 
   // Show error toast when error occurs
   useEffect(() => {
@@ -113,6 +122,18 @@ const HomePage = () => {
       toast.error(t('errors.city_not_found'));
     }
   }, [searchCity, isLoading, weather, isError, t]);
+
+  // Save last viewed city when weather is loaded successfully
+  // Only update if locationKey changed to prevent infinite loop
+  useEffect(() => {
+    if (weather && locationKey && localizedCityName) {
+      // Check if this is a different city than what's saved
+      if (lastViewedCity?.locationKey !== locationKey) {
+        setLastViewedCity(locationKey, localizedCityName);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locationKey]);
 
   /**
    * Format date for display (uses current language)
@@ -137,15 +158,22 @@ const HomePage = () => {
   };
 
   /**
+   * Check if current city is in favorites
+   */
+  const isCurrentCityFavorite = locationKey ? isFavorite(locationKey) : false;
+
+  /**
    * Handle favorite button click
    */
   const handleFavoriteClick = () => {
-    if (favorites.includes(searchCity)) {
-      removeFavorite(searchCity);
-      toast.success(`${searchCity} ${t('favorites.removed')}`);
+    if (!locationKey || !localizedCityName) return;
+
+    if (isCurrentCityFavorite) {
+      removeFavorite(locationKey);
+      toast.success(`${localizedCityName} ${t('favorites.removed')}`);
     } else {
-      addFavorite(searchCity);
-      toast.success(`${searchCity} ${t('favorites.added')}`);
+      addFavorite(locationKey, localizedCityName);
+      toast.success(`${localizedCityName} ${t('favorites.added')}`);
     }
   };
 
@@ -161,6 +189,9 @@ const HomePage = () => {
     setSearchCity(trimmedCity);
     setSearchInput('');
   };
+
+  // Display name: use localized name if available, otherwise search city
+  const displayCityName = localizedCityName || searchCity;
 
   return (
     <div>
@@ -191,9 +222,9 @@ const HomePage = () => {
           <div className="current-weather">
             <div className="city-info">
               <button onClick={handleFavoriteClick} className="favorite-button">
-                {favorites.includes(searchCity) ? <FaStar /> : <FaRegStar />}
+                {isCurrentCityFavorite ? <FaStar /> : <FaRegStar />}
               </button>
-              <h1 className="city-name">{searchCity}</h1>
+              <h1 className="city-name">{displayCityName}</h1>
               <div className="date-time">
                 <span>{t('home.today')}</span>
                 <span>{formatTime(currentTime)}</span>

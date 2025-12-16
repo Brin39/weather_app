@@ -7,10 +7,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://dataservice.accuweather.com',
+        target: 'https://dataservice.accuweather.com',
         changeOrigin: true,
         rewrite: (path: string) => path.replace(/^\/api/, ''),
-        secure: false,
+        secure: true,
       },
     },
   },

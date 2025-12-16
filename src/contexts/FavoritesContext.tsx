@@ -1,25 +1,76 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { FavoritesContextValue } from '../types';
+import type { FavoritesContextValue, FavoriteCity } from '../types';
 
 // Create context with undefined default
 const FavoritesContext = createContext<FavoritesContextValue | undefined>(undefined);
 
-// LocalStorage key for persistence
-const STORAGE_KEY = 'weather_app_favorites';
+// LocalStorage keys for persistence
+const STORAGE_KEY = 'weather_app_favorites_v2';
+const LAST_CITY_KEY = 'weather_app_last_city_v2';
+const OLD_STORAGE_KEY = 'weather_app_favorites';
+
+/**
+ * Validate that an item is a valid FavoriteCity object
+ */
+const isValidFavoriteCity = (item: unknown): item is FavoriteCity => {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'locationKey' in item &&
+    'defaultName' in item &&
+    typeof (item as FavoriteCity).locationKey === 'string' &&
+    typeof (item as FavoriteCity).defaultName === 'string'
+  );
+};
 
 /**
  * Load favorites from localStorage
  * Returns empty array if no data or on error
+ * Also clears old format data to prevent conflicts
  */
-const loadFavoritesFromStorage = (): string[] => {
+const loadFavoritesFromStorage = (): FavoriteCity[] => {
   try {
+    // Clear old format data if exists
+    if (localStorage.getItem(OLD_STORAGE_KEY)) {
+      localStorage.removeItem(OLD_STORAGE_KEY);
+      localStorage.removeItem('weather_app_last_city');
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return [];
+
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+
+    // Validate each item is a proper FavoriteCity object
+    return parsed.filter(isValidFavoriteCity);
   } catch (error) {
     console.error('Error loading favorites:', error);
     return [];
+  }
+};
+
+/**
+ * Load last viewed city from localStorage
+ * Validates the data structure before returning
+ */
+const loadLastViewedCity = (): FavoriteCity | null => {
+  try {
+    const stored = localStorage.getItem(LAST_CITY_KEY);
+    if (!stored) return null;
+
+    const parsed = JSON.parse(stored);
+
+    // Validate it's a proper FavoriteCity object
+    if (isValidFavoriteCity(parsed)) {
+      return parsed;
+    }
+
+    // Invalid format, clear it
+    localStorage.removeItem(LAST_CITY_KEY);
+    return null;
+  } catch {
+    return null;
   }
 };
 
@@ -34,9 +85,10 @@ interface FavoritesProviderProps {
  */
 export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
   // Initialize state from localStorage
-  const [favorites, setFavorites] = useState<string[]>(loadFavoritesFromStorage);
+  const [favorites, setFavorites] = useState<FavoriteCity[]>(loadFavoritesFromStorage);
+  const [lastViewedCity, setLastViewedCityState] = useState<FavoriteCity | null>(loadLastViewedCity);
 
-  // Save to localStorage whenever favorites change
+  // Save favorites to localStorage whenever they change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
@@ -46,33 +98,45 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
   }, [favorites]);
 
   /**
-   * Add a city to favorites
-   * Prevents duplicates and validates input
+   * Set last viewed city and save to localStorage
    */
-  const addFavorite = (city: string): void => {
-    if (!city || typeof city !== 'string') return;
-    const trimmedCity = city.trim();
-    if (!trimmedCity) return;
+  const setLastViewedCity = (locationKey: string, name: string): void => {
+    if (!locationKey || !name) return;
+    const city: FavoriteCity = { locationKey, defaultName: name };
+    setLastViewedCityState(city);
+    try {
+      localStorage.setItem(LAST_CITY_KEY, JSON.stringify(city));
+    } catch (error) {
+      console.error('Error saving last viewed city:', error);
+    }
+  };
+
+  /**
+   * Add a city to favorites
+   * Prevents duplicates based on locationKey
+   */
+  const addFavorite = (locationKey: string, name: string): void => {
+    if (!locationKey || !name) return;
 
     setFavorites((prev) => {
-      if (prev.includes(trimmedCity)) return prev;
-      return [...prev, trimmedCity];
+      if (prev.some((f) => f.locationKey === locationKey)) return prev;
+      return [...prev, { locationKey, defaultName: name }];
     });
   };
 
   /**
-   * Remove a city from favorites
+   * Remove a city from favorites by locationKey
    */
-  const removeFavorite = (city: string): void => {
-    if (!city) return;
-    setFavorites((prev) => prev.filter((c) => c !== city));
+  const removeFavorite = (locationKey: string): void => {
+    if (!locationKey) return;
+    setFavorites((prev) => prev.filter((f) => f.locationKey !== locationKey));
   };
 
   /**
-   * Check if a city is in favorites
+   * Check if a city is in favorites by locationKey
    */
-  const isFavorite = (city: string): boolean => {
-    return favorites.includes(city);
+  const isFavorite = (locationKey: string): boolean => {
+    return favorites.some((f) => f.locationKey === locationKey);
   };
 
   const value: FavoritesContextValue = {
@@ -80,6 +144,8 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
     addFavorite,
     removeFavorite,
     isFavorite,
+    lastViewedCity,
+    setLastViewedCity,
   };
 
   return (

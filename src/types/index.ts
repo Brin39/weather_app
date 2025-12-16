@@ -146,13 +146,23 @@ export interface LocationSearchResult {
 // ============================================
 
 /**
+ * Favorite city data
+ */
+export interface FavoriteCity {
+  locationKey: string;
+  defaultName: string;  // Fallback name if API unavailable
+}
+
+/**
  * Favorites context value
  */
 export interface FavoritesContextValue {
-  favorites: string[];
-  addFavorite: (city: string) => void;
-  removeFavorite: (city: string) => void;
-  isFavorite: (city: string) => boolean;
+  favorites: FavoriteCity[];
+  addFavorite: (locationKey: string, name: string) => void;
+  removeFavorite: (locationKey: string) => void;
+  isFavorite: (locationKey: string) => boolean;
+  lastViewedCity: FavoriteCity | null;
+  setLastViewedCity: (locationKey: string, name: string) => void;
 }
 
 /**
